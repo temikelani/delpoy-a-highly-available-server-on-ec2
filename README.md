@@ -9,10 +9,12 @@
 <br>
 
 ## Tech Stack
+
 - AWS VPC
 - AWS EC2
 - AWS CLI
 - AWS S3
+- AWS CLoud Formation
 
 ## Architecture Diagram
 
@@ -46,7 +48,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 - [ ] You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private subnets`. The launch configuration will be used by an auto-scaling group.
 
-- [ ] You'll need `two vCPUs and at least 4GB of RAM.` 
+- [ ] You'll need `two vCPUs and at least 4GB of RAM.`
 - [ ] The Operating System to be used is `Ubuntu 18`. So, choose an `Instance size and Machine Image (AMI) that best fits this spec`. Be sure to allocate `at least 10GB` of disk space so that you don't run into issues.
 - [ ] Since you will be `downloading the application archive from an S3 Bucket`, you'll need to create an `IAM Role that allows your instances to use the S3 Service.`
 - [ ] Udagram communicates on the default `HTTP Port: 80,` so your servers will need this inbound port open since you will use it with the Load Balancer and the Load Balancer Health Check. As for outbound, the servers will need unrestricted internet access to be able to download and update their software.
@@ -54,7 +56,6 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 - [ ] The application needs to be `deployed into private subnets` with a Load Balancer located in a public subnet.
 - [ ] One of the `output` exports of the CloudFormation script should be `the public URL of the LoadBalancer`. Bonus points if you `add http:// in front of the load balancer DNS Name `in the output, for convenience.
 - [ ] Set up a `bastion host (jump box)` to allow you to `SSH into your private subnet servers.` This bastion host would be on a `Public Subnet with port 22 `open only to your home IP address, and it would need to have the `private key` that you use to `access the other servers.`
-
 
 <br>
 <br>
