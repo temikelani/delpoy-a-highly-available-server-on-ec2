@@ -9,10 +9,10 @@ COMMAND=$1
 STACK_NAME=$2
 
 # Path to template file
-TEMPLATE=$3
+TEMPLATE="../cloudformation/main.yaml"
 
 # Path to Parameters
-PARAMS=$4
+PARAMS="../cloudformation/parameters.json"
 
 case $COMMAND in
 
@@ -20,15 +20,15 @@ case $COMMAND in
     aws cloudformation create-stack \
     --stack-name $2 \
     --template-body file://$TEMPLATE \
-    --parameters file://PARAMS\
+    --parameters file://$PARAMS \
     --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" \
     ;;
 
   update)
     aws cloudformation update-stack \
     --stack-name $2\
-    --template-body file://TEMPLATE \
-    --parameters file://PARAM
+    --template-body file://$TEMPLATE \
+    --parameters file://#PARAM
     ;;
 
   delete)
@@ -38,9 +38,8 @@ case $COMMAND in
 
   *)
     echo -n "Wrong arguments : Run script as follows:" 
-    echo -n "Wrong arguments : ./run.sh arg1 arg2 arg3:" 
+    echo -n "Wrong arguments : ./run.sh arg1 arg2:" 
     echo -n "Where arg1: create-stack | update-stack | delete delete-stack"
     echo -n "Where arg2: path-to-cloudformation-template"
-    echo -n "Where arg3: path-to-tempplate-parametes"
     ;;
 esac
