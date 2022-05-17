@@ -63,6 +63,9 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 # Steps <a id='steps'></a> ([go to top](#top))
 
+- Create a Key Par
+- Obtain ami id of Ubuntu 18
+
 <br>
 <br>
 <br>
@@ -113,7 +116,26 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 # Resources <a id='res'></a> ([go to top](#top))
 
+- simulate stress on ASG
+
+- https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html#finding-an-ami-console
+
 - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html#cfn-ec2-internetgateway-tags
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-path
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html
+- https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
+
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html
+
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-launchconfiguration.html
+
+- https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html
+
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-creationpolicy.html
+
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-autoscaling.html
+
+- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html
 
 <br>
 <br>

@@ -6,59 +6,85 @@ Parameters:
     Description: Environment name, used as a prefix for resources
     Type: String
 
-  vpcCIDR:
-    Description: CIRD IP range for the VPC (default - 10.0.0.0/16)
+  vpcCidr:
+    Description: vpc CIDR Range
     Type: String
-    Default: 10.0.0.0/16
 
   publicSubnet1Cidr:
-    Description: CIRD IP range for the public subnet (Availability Zone 1) (default - 10.0.0.0/24)
+    Description: public subnet CIDR Range in az-1
     Type: String
-    Default: 10.0.0.0/24
 
   publicSubnet2Cidr:
-    Description: CIRD IP range for the public subnet (Availability Zone 2) (default - 10.0.1.0/24)
+    Description: public subnet CIDR Range in az-2
     Type: String
-    Default: 10.0.1.0/24
 
   privateSubnet1Cidr:
-    Description: CIRD IP range for the private subnet (Availability Zone 1) (default - 10.0.2.0/24)
+    Description: private subnet CIDR Range in az-1
     Type: String
-    Default: 10.0.2.0/24
 
   privateSubnet2Cidr:
-    Description: CIRD IP range for the private subnet (Availability Zone 2) (default - 10.0.3.0/24)
+    Description: private subnet CIDR Range in az-2
     Type: String
-    Default: 10.0.3.0/24
 
   sshIp:
     Description: Ip to allow ssh connection from
-    Type: String|Number|CommaDelimitedList
-    Default: -
+    Type: String
+
+  asgInstanceType:
+    Description: Asg Instance Type(s)
+    Type: String
+    ConstraintDescription: only t2.nano/medium and t3.medium instances
+    AllowedValues:
+      - t2.micro
+      - t2.medium
+      - t3.medium
+
+  asgImageId:
+    Description: Web serve image id
+    Type: AWS::EC2::Image::Id
+
+  asgKeyPair:
+    Description: Web serve image id
+    Type: String
+
+  asgVolumeSize:
+    Description: Volume size for instance in ASG
+    Type: String
+
+  asgWebServerCount:
+    Description: Desired amount of instances in asg
+    Type: String
+
+  maxCpuUtil:
+    Description: Average CPU utilization
+    Type: String
+
+  maxRequestPerInstance:
+    Description: Max no of requested per instance
+    Type: String
 
 Resources:
-
-# # ----------------------------------------------------------------------
-# ------------------- VPC - IGW - IGW-Attachment
-# Create a VPC with access to the internet
-# # ----------------------------------------------------------------------
+  # # ----------------------------------------------------------------------
+  # ------------------- VPC - IGW - IGW-Attachment
+  # Create a VPC with access to the internet
+  # # ----------------------------------------------------------------------
 
   vpc:
     Type: AWS::EC2::VPC
     Properties:
-      CidrBlock: !Ref vpcCIDR
+      CidrBlock: !Ref vpcCidr
       EnableDnsHostnames: true
       EnableDnsSupport: true
       Tags:
-      - Key: environment
-        Value: !Ref environment
+        - Key: environment
+          Value: !Ref environment
 
   internetGateway:
     Type: AWS::EC2::InternetGateway
     Properties:
       Tags:
-      - Key: environment
-        Value: !Ref environment
+        - Key: environment
+          Value: !Ref environment
 
   internetGatewayAttachment:
     Type: AWS::EC2::VPCGatewayAttachment
@@ -66,10 +92,10 @@ Resources:
       VpcId: !Ref vpc
       InternetGatewayId: !Ref internetGateway
 
-# # ----------------------------------------------------------------------
-# --------------------- Public Subnet Network
-# 
-# # ----------------------------------------------------------------------
+  # # ----------------------------------------------------------------------
+  # --------------------- Public Subnet Network
+  #
+  # # ----------------------------------------------------------------------
 
   publicSubnet1:
     Type: "AWS::EC2::Subnet"
@@ -77,26 +103,26 @@ Resources:
       VpcId: !Ref vpc
       CidrBlock: !Ref publicSubnet1Cidr
       MapPublicIpOnLaunch: true
-      AvailabilityZone: !Select [0, !GetAZs '' ]
+      AvailabilityZone: !Select [0, !GetAZs ""]
       Tags:
         - Key: Name
           Value: !Sub "${environment}-public-subnet-az-1"
         - Key: subnet-type
           Value: Public
-  
+
   publicSubnet2:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref vpc
       CidrBlock: !Ref publicSubnet2Cidr
       MapPublicIpOnLaunch: true
-      AvailabilityZone: !Select [1, !GetAZs '' ]
+      AvailabilityZone: !Select [1, !GetAZs ""]
       Tags:
         - Key: Name
           Value: !Sub "${environment}-public-subnet-az-2"
         - Key: subnet-type
           Value: Public
-  
+
   publicRouteTable:
     Type: "AWS::EC2::RouteTable"
     Properties:
@@ -104,40 +130,36 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${environment}-public-route-table"
-  
+
   publicRoute:
     Type: AWS::EC2::Route
     Properties:
       DestinationCidrBlock: "0.0.0.0/0"
       RouteTableId: !Ref publicRouteTable
       GatewayId: !Ref internetGateway
-  
+
   publicRouteTableAssociation1:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      RouteTableId:
-        !Ref publicRouteTable
-      SubnetId: 
-        !Ref publicSubnet1
-  
+      RouteTableId: !Ref publicRouteTable
+      SubnetId: !Ref publicSubnet1
+
   publicRouteTableAssociation2:
     Type: "AWS::EC2::SubnetRouteTableAssociation"
     Properties:
-      RouteTableId:
-        !Ref publicRouteTable
-      SubnetId:
-        !Ref publicSubnet2
-  
+      RouteTableId: !Ref publicRouteTable
+      SubnetId: !Ref publicSubnet2
+
   natGateway1ElasticIP:
     Type: "AWS::EC2::EIP"
     Properties:
       Domain: vpc
-  
+
   natGateway2ElasticIP:
     Type: "AWS::EC2::EIP"
     Properties:
       Domain: "vpc"
-  
+
   natGateway1:
     Type: "AWS::EC2::NatGateway"
     Properties:
@@ -146,7 +168,7 @@ Resources:
       Tags:
         - Key: "Name"
           Value: !Sub "${environment}-nag-gateway-1"
-  
+
   natGateway2:
     Type: "AWS::EC2::NatGateway"
     Properties:
@@ -156,37 +178,37 @@ Resources:
         - Key: "Name"
           Value: !Sub "${environment}-nag-gateway-2"
 
-# # ----------------------------------------------------------------------
-# ----- Private Subnet Network
-# 
-# # ----------------------------------------------------------------------
+  # # ----------------------------------------------------------------------
+  # ----- Private Subnet Network
+  #
+  # # ----------------------------------------------------------------------
 
   privateSubnet1:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref vpc
-      CidrBlock: !Ref publicSubnet2Cidr
+      CidrBlock: !Ref privateSubnet1Cidr
       MapPublicIpOnLaunch: false
-      AvailabilityZone: !Select [0, !GetAZs '' ]
+      AvailabilityZone: !Select [0, !GetAZs ""]
       Tags:
         - Key: Name
           Value: !Sub "${environment}-private-subnet-az-1"
         - Key: subnet-type
           Value: Private
-  
+
   privateSubnet2:
     Type: "AWS::EC2::Subnet"
     Properties:
       VpcId: !Ref vpc
-      CidrBlock: !Ref publicSubnet2Cidr
+      CidrBlock: !Ref privateSubnet2Cidr
       MapPublicIpOnLaunch: false
-      AvailabilityZone: !Select [0, !GetAZs '' ]
+      AvailabilityZone: !Select [1, !GetAZs ""]
       Tags:
         - Key: Name
           Value: !Sub "${environment}-private-subnet-az-2"
         - Key: subnet-type
           Value: Private
-  
+
   privateRouteTable1:
     Type: "AWS::EC2::RouteTable"
     Properties:
@@ -194,7 +216,7 @@ Resources:
       Tags:
         - Key: Name
           Value: !Sub "${environment}-private-route-table-1"
-  
+
   privateRoute1:
     Type: "AWS::EC2::Route"
     Properties:
@@ -207,7 +229,7 @@ Resources:
     Properties:
       RouteTableId: !Ref privateRouteTable1
       SubnetId: !Ref privateSubnet1
-  
+
   privateRouteTable2:
     Type: "AWS::EC2::RouteTable"
     Properties:
@@ -229,12 +251,11 @@ Resources:
       RouteTableId: !Ref privateRouteTable2
       SubnetId: !Ref privateSubnet2
 
+  # ----------------------------------------------------------------------
+  # ------------------ Network Security Configuration
+  #
+  # ----------------------------------------------------------------------
 
-# ----------------------------------------------------------------------
-# ------------------ Network Security Configuration
-# 
-# ----------------------------------------------------------------------
-  
   albSG:
     Type: "AWS::EC2::SecurityGroup"
     Properties:
@@ -243,14 +264,14 @@ Resources:
       VpcId: !Ref vpc
       SecurityGroupIngress:
         - IpProtocol: tcp
-          FromPort: '80'
-          ToPort: '80'
-          CidrIp: '0.0.0.0/0'
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: "0.0.0.0/0"
       SecurityGroupEgress:
         - IpProtocol: tcp
-          FromPort: '80'
-          ToPort: '80'
-          CidrIp: '0.0.0.0/0'
+          FromPort: "80"
+          ToPort: "80"
+          CidrIp: "0.0.0.0/0"
 
   asgServerSG:
     Type: "AWS::EC2::SecurityGroup"
@@ -268,7 +289,7 @@ Resources:
           ToPort: 22
           IpProtocol: "tcp"
           Description: "Allow SSH traffic"
-          DestinationSecurityGroupId: !Ref bastionHostSSH
+          SourceSecurityGroupId: !Ref bastionHostSSH
 
   bastionHostSSH:
     Type: "AWS::EC2::SecurityGroup"
@@ -283,78 +304,216 @@ Resources:
           Description: "Allow SSH traffic"
           CidrIp: !Ref sshIp
 
+  # ----------------------------------------------------------------------
+  # ---------------- IAM Permissions Configuration -----------------------
+  #
+  # ----------------------------------------------------------------------
+
+  s3ReadOnlyRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "sts:AssumeRole"
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+
+  asgInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref s3ReadOnlyRole
+
+  # ----------------------------------------------------------------------
+  # ---------------- Auto Scaling Group Configuration --------------------
+  #
+  # ----------------------------------------------------------------------
+
+  asgServerLaunchConfig:
+    Type: AWS::AutoScaling::LaunchConfiguration
+    Properties:
+      ImageId: !Ref asgImageId
+      SecurityGroups:
+        - !Ref asgServerSG
+      InstanceType: !Ref asgInstanceType
+      KeyName: !Ref asgKeyPair
+      BlockDeviceMappings:
+        - DeviceName: "/dev/sdh"
+          Ebs:
+            VolumeSize: !Ref asgVolumeSize
+      UserData: !Base64
+        Fn::Sub: |
+          #!/bin/bash
+          apt-get update -y
+          apt-get install unzip awscli -y
+          apt-get install apache2 -y
+          systemctl start apache2.service
+          cd /var/www/html
+          # aws s3 cp s3://udacity-demo-1/udacity.zip .
+          # unzip -o udacity.zip
+          echo "<h1>Udacity Demo Web Server Up and Running!</h1>" >> index.html
+          EC2_AVAIL_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
+          echo "<h1>Hello World From $(hostname -f) in AZ $EC2_AVAIL_ZONE </h1>" >> /var/www/html/index.html
+
+  autoScalingGroup:
+    Type: AWS::AutoScaling::AutoScalingGroup
+    DependsOn: privateRoute1
+    Properties:
+      VPCZoneIdentifier:
+        - !Ref privateSubnet1
+        - !Ref privateSubnet2
+      LaunchConfigurationName: !Ref asgServerLaunchConfig
+      MinSize: "2"
+      MaxSize: !Ref asgWebServerCount
+      DesiredCapacity: !Ref asgWebServerCount
+      TargetGroupARNs:
+        - !Ref albTargetGroup
+      Tags:
+        - Key: Name
+          Value: !Sub ${environment}-Instance
+          PropagateAtLaunch: true
+
+  avgCpuUtilPolicy:
+    Type: AWS::AutoScaling::ScalingPolicy
+    Properties:
+      AutoScalingGroupName: !Ref autoScalingGroup
+      PolicyType: TargetTrackingScaling
+      TargetTrackingConfiguration:
+        PredefinedMetricSpecification:
+          PredefinedMetricType: ASGAverageCPUUtilization
+        TargetValue: !Ref maxCpuUtil
+
+  # albRequestCountPolicy:
+  #   Type: AWS::AutoScaling::ScalingPolicy
+  #   Properties:
+  #     AutoScalingGroupName: !Ref autoScalingGroup
+  #     PolicyType: TargetTrackingScaling
+  #     TargetTrackingConfiguration:
+  #       PredefinedMetricSpecification:
+  #         PredefinedMetricType: ALBRequestCountPerTarget
+  #         ResourceLabel: !Join
+  #           - "/"
+  #           - - !GetAtt publicAlb.LoadBalancerFullName
+  #             - !GetAtt albTargetGroup.TargetGroupFullName
+  #       TargetValue: !Ref maxRequestPerInstance
+
+  # ----------------------------------------------------------------------
+  # ---------------- Outputs Configuration -------------------------------
+  #
+  # ----------------------------------------------------------------------
+
+  albTargetGroup:
+    Type: AWS::ElasticLoadBalancingV2::TargetGroup
+    Properties:
+      HealthCheckIntervalSeconds: 10
+      HealthCheckTimeoutSeconds: 7
+      HealthyThresholdCount: 2
+      HealthCheckProtocol: HTTP
+      Port: 80
+      Protocol: HTTP
+      UnhealthyThresholdCount: 5
+      VpcId: !Ref vpc
+
+  publicAlb:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    DependsOn: internetGatewayAttachment
+    Properties:
+      Subnets:
+        - !Ref publicSubnet1
+        - !Ref publicSubnet2
+      SecurityGroups:
+        - !Ref albSG
+      Tags:
+        - Key: Name
+          Value: !Sub ${environment}-alb
+
+  ALBListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      DefaultActions:
+        - Type: forward
+          TargetGroupArn: !Ref albTargetGroup
+      LoadBalancerArn: !Ref publicAlb
+      Port: "80"
+      Protocol: HTTP
+
+  AlbListenerRule:
+    Type: AWS::ElasticLoadBalancingV2::ListenerRule
+    Properties:
+      Actions:
+        - Type: forward
+          TargetGroupArn: !Ref albTargetGroup
+      Conditions:
+        - Field: path-pattern
+          Values: [/]
+      ListenerArn: !Ref ALBListener
+      Priority: 1
 
 # ----------------------------------------------------------------------
 # ---------------- Outputs Configuration -------------------------------
-# 
+#
 # ----------------------------------------------------------------------
 
-Outputs
+Outputs:
   vpcID:
     Description: reference to VPC ID
-    Value: !Ref vp
-    Export: 
-      Name: !Sub $(environment)-vpc-id
-  
+    Value: !Ref vpc
+    # Export:
+    #   Name: !Sub ${environment}-vpc-id
+
   publicSubnet1:
     Description: Reference to public subnet 1
     Value: !Ref publicSubnet1
-    Export: 
-      Name: !Sub ${environment}-public-subnet-1
+    # Export:
+    #   Name: !Sub ${environment}-public-subnet-1
 
   publicSubnet2:
     Description: Reference to public subnet 2
     Value: !Ref publicSubnet2
-    Export: 
-      Name: !Sub ${environment}-public-subnet-2
+    # Export:
+    #   Name: !Sub ${environment}-public-subnet-2
 
   privateSubnet1:
     Description: Reference to private subnet 1
     Value: !Ref privateSubnet1
-    Export: 
-      Name: !Sub ${environment}-private-subnet-1
-  
+    # Export:
+    #   Name: !Sub ${environment}-private-subnet-1
+
   privateSubnet2:
     Description: Reference to private subnet 2
     Value: !Ref privateSubnet2
-    Export: 
-      Name: !Sub ${environment}-private-subnet-2
+    # Export:
+    #   Name: !Sub ${environment}-private-subnet-2
 
   loadBalancerSG:
     Description: Reference to the Load Balancer SecurityGroup
     Value: !Ref albSG
-    Export: 
-      Name: !Sub ${environment}-alb-sg
+    # Export:
+    #   Name: !Sub ${environment}-alb-sg
 
   autoSclaingGroupSG:
     Description: Reference to the SG if the AustoScaling Group
     Value: !Ref asgServerSG
-    Export: 
-      Name: !Sub ${environment}-asg-server-sg
+    # Export:
+    #   Name: !Sub ${environment}-asg-server-sg
 
   bastionHostSG:
     Description: Reference to the SG of hte bastion Host
-    Value: !Ref bastionHostSG
-    Export:
-      Name: !Sub ${environment}-bastion-sg
+    Value: !Ref bastionHostSSH
+    # Export:
+    #   Name: !Sub ${environment}-bastion-sg
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+  albDNS:
+    Description: The website URL
+    Value: !Join ["", ["http://", !GetAtt publicAlb.DNSName]]
+    # Export:
+    #   Name: !Sub ${environment}-website-url"
 # Parameters:
 #   # Paramenters are entirely optional.
 #   # but using them will make your cloudformation templates more reusable

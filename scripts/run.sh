@@ -28,7 +28,8 @@ case $COMMAND in
     aws cloudformation update-stack \
     --stack-name $2\
     --template-body file://$TEMPLATE \
-    --parameters file://#PARAM
+    --parameters file://$PARAMS \
+    --capabilities "CAPABILITY_IAM" "CAPABILITY_NAMED_IAM" 
     ;;
 
   delete)

@@ -1,0 +1,58 @@
+[
+  {
+    "ParameterKey": "environment",
+    "ParameterValue": "udacity"
+  },
+  {
+    "ParameterKey": "vpcCidr",
+    "ParameterValue": "10.0.0.0/16"
+  },
+  {
+    "ParameterKey": "publicSubnet1Cidr",
+    "ParameterValue": "10.0.0.0/24"
+  },
+  {
+    "ParameterKey": "publicSubnet2Cidr",
+    "ParameterValue": "10.0.1.0/24"
+  },
+  {
+    "ParameterKey": "privateSubnet1Cidr",
+    "ParameterValue": "10.0.2.0/24"
+  },
+  {
+    "ParameterKey": "privateSubnet2Cidr",
+    "ParameterValue": "10.0.3.0/24"
+  },
+  {
+    "ParameterKey": "sshIp",
+    "ParameterValue": "47.16.207.88/32"
+  },
+  {
+    "ParameterKey": "asgInstanceType",
+    "ParameterValue": "t3.medium"
+  },
+  {
+    "ParameterKey": "asgImageId",
+    "ParameterValue": "ami-077f4dcd20ed5ed5d"
+  },
+  {
+    "ParameterKey": "asgKeyPair",
+    "ParameterValue": "asg-alb"
+  },
+  {
+    "ParameterKey": "asgVolumeSize",
+    "ParameterValue": "10"
+  },
+  {
+    "ParameterKey": "asgWebServerCount",
+    "ParameterValue": "2"
+  },
+  {
+    "ParameterKey": "maxCpuUtil",
+    "ParameterValue": "70.0"
+  },
+  {
+    "ParameterKey": "maxRequestPerInstance",
+    "ParameterValue": "3"
+  }
+]
