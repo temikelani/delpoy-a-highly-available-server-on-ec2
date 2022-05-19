@@ -63,6 +63,11 @@ Parameters:
     Description: Max no of requested per instance
     Type: String
 
+  amazonLinuxAmi:
+    Description: The latest AMZN Linux 2 AMI
+    Type: AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>
+    Default: /aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2
+
 Resources:
   # # ----------------------------------------------------------------------
   # ------------------- VPC - IGW - IGW-Attachment
@@ -323,12 +328,55 @@ Resources:
       ManagedPolicyArns:
         - "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
 
+  ec2DescsribeInstancesRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: "Allow"
+            Action: "sts:AssumeRole"
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+      ManagedPolicyArns:
+        - "arn:aws:iam::aws:policy/AmazonEC2ReadOnlyAccess"
+
   asgInstanceProfile:
     Type: "AWS::IAM::InstanceProfile"
     Properties:
       Path: "/"
       Roles:
         - !Ref s3ReadOnlyRole
+
+  bastionHostInstanceProfile:
+    Type: "AWS::IAM::InstanceProfile"
+    Properties:
+      Path: "/"
+      Roles:
+        - !Ref ec2DescsribeInstancesRole
+
+  # ----------------------------------------------------------------------
+  # ---------------- BastionHost Configuration -------------------------------
+  #
+  # ----------------------------------------------------------------------
+
+  bastionHost:
+    Type: AWS::EC2::Instance
+    Properties:
+      KeyName: !Ref asgKeyPair
+      ImageId: !Ref amazonLinuxAmi
+      InstanceType: !Ref asgInstanceType
+      IamInstanceProfile: !Ref bastionHostInstanceProfile
+      SecurityGroupIds:
+        - !Ref bastionHostSSH
+      SubnetId: !Ref publicSubnet1
+      UserData: !Base64 |
+        #!/bin/bash -ex
+        yum update -y
+      Tags:
+        - Key: Name
+          Value: BastionHost
 
   # ----------------------------------------------------------------------
   # ---------------- Auto Scaling Group Configuration --------------------
@@ -343,23 +391,24 @@ Resources:
         - !Ref asgServerSG
       InstanceType: !Ref asgInstanceType
       KeyName: !Ref asgKeyPair
+      IamInstanceProfile: !Ref asgInstanceProfile
       BlockDeviceMappings:
         - DeviceName: "/dev/sdh"
           Ebs:
             VolumeSize: !Ref asgVolumeSize
       UserData: !Base64
         Fn::Sub: |
-          #!/bin/bash
+          #!/bin/bash -ex
           apt-get update -y
           apt-get install unzip awscli -y
           apt-get install apache2 -y
           systemctl start apache2.service
           cd /var/www/html
-          # aws s3 cp s3://udacity-demo-1/udacity.zip .
+          # aws s3 cp s3://s3-bucket-name/web-files.zip .
           # unzip -o udacity.zip
-          echo "<h1>Udacity Demo Web Server Up and Running!</h1>" >> index.html
+          echo "<h1>Udacity Demo Web Server Up and Running\!</h1>" > index.html
           EC2_AVAIL_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
-          echo "<h1>Hello World From $(hostname -f) in AZ $EC2_AVAIL_ZONE </h1>" >> /var/www/html/index.html
+          echo "<h1>Hello World From $(hostname -f) in AZ $EC2_AVAIL_ZONE </h1>" >> index.html
 
   autoScalingGroup:
     Type: AWS::AutoScaling::AutoScalingGroup
@@ -404,7 +453,7 @@ Resources:
   #       TargetValue: !Ref maxRequestPerInstance
 
   # ----------------------------------------------------------------------
-  # ---------------- Outputs Configuration -------------------------------
+  # ---------------- Load  Balancer Configuration--------------------------
   #
   # ----------------------------------------------------------------------
 
@@ -514,6 +563,14 @@ Outputs:
     Value: !Join ["", ["http://", !GetAtt publicAlb.DNSName]]
     # Export:
     #   Name: !Sub ${environment}-website-url"
+
+  bastionHostpublicSSHAddress:
+    Description: Bastions host public Dns to ssg
+    Value: !Join ["", ["ec2-user@", !GetAtt bastionHost.PublicDnsName]]
+# -----------------------------------
+# -----------------------------------
+# -----------------------------------
+
 # Parameters:
 #   # Paramenters are entirely optional.
 #   # but using them will make your cloudformation templates more reusable

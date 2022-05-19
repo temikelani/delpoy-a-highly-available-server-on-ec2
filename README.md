@@ -63,8 +63,15 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 # Steps <a id='steps'></a> ([go to top](#top))
 
-- Create a Key Par
-- Obtain ami id of Ubuntu 18
+- Create a Key Pair named `asg-alb`
+- Obtain latest Ami id of Ubuntu 18
+  - Add values to [parameters.json ](./cloudformation/parameters.json)
+  - `asgImageId"` and `asgKeyPair`
+- deploy [cloudformation template](./cloudformation/main.yaml) which creates the following resources
+  - a vpc
+  - 2 public subnets, 1 public route etc...
+  - 2 private subnets
+  - etc
 
 <br>
 <br>
@@ -124,7 +131,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-path
 - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html
 - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
-
+  ¡
 - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html
 
 - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-launchconfiguration.html
@@ -140,3 +147,8 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 <br>
 <br>
 <br>
+
+# To DO <a id='todo'></a> ([go to top](#top))
+
+- add stress test to test sacling policies
+
