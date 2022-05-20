@@ -46,7 +46,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 ## Objectives
 
-- [x]You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private Subnets`. The launch configuration will be used by an auto-scaling group.
+- [x] You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private Subnets`. The launch configuration will be used by an auto-scaling group.
 
 - [x] You'll need `two vCPUs and at least 4GB of RAM.`
 - [x] The Operating System to be used is `Ubuntu 18`. So, choose an `Instance size and Machine Image (AMI) that best fits this spec`. Be sure to allocate `at least 10GB` of disk space so that you don't run into issues.
@@ -95,7 +95,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # Via CLoud Formation <a id='0'></a> ([go to top](#top))
 
 <details>
-<summary>> Expand For Details </summary>
+<summary> Expand For Details </summary>
 
 - clone this repo and navigate to it.
 - run the script to deploy the template
@@ -137,7 +137,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # Via Terraform <a id='1'></a> ([go to top](#top))
 
 <details>
-<summary>> CLick to Expand</summary>
+<summary> CLick to Expand</summary>
 
 </details>
 
@@ -148,7 +148,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # Via CLI/Bash Script<a id='2'></a> ([go to top](#top))
 
 <details>
-<summary>> CLick to Expand</summary>
+<summary> CLick to Expand</summary>
 
 </details>
 
@@ -159,7 +159,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # Via Console <a id='3'></a> ([go to top](#top))
 
 <details>
-<summary>> CLick to Expand</summary>
+<summary> CLick to Expand</summary>
 
 </details>
 
@@ -196,8 +196,9 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 # To DO <a id='todo'></a> ([go to top](#top))
 
-- add stress test to test sacling policies
+- add stress test to test scaling policies
 - add Network ACLs
 - make keypair name a viariable
 - fix ALB Request Scaling Policy
 - Add CFN helper cripts to send success signals to ASG Creation policy
+- upgrade python on ubuntu 18 (or just use ubuntu 20?)
