@@ -97,15 +97,35 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 <details>
 <summary>> Expand For Details </summary>
 
-- clone this repo and navigate to it. 
+- clone this repo and navigate to it.
 - run the script to deploy the template
   ```
   ./scripts/run.sh create-stack
   ```
-- Obtain ALB Domain String from stdout 
+- After 8 minutes Script will automatically print ALB Domain to stdout
   ```bash
   # example
   -------- alb-dns: http://asg-a-publi-8Q9RIHMEQFPX-999194011.us-east-1.elb.amazonaws.com
+  ```
+- Then Script will automatically copy revelant files and ssh into bastion Host. Enter yes to the prompt
+  ```
+  Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
+  ```
+- Once in bastion host run
+  ```
+  bash ./instance-details.sh
+  ```
+  - to output all Running instance IP Addresses to file `instance-details.txt`
+- Obtain private Ip addressed of ASG server
+  ```
+  cat instance-details.txt
+  ```
+  - private instances are in ip range `10.0.2.x` and `10.0.3.x` as defined in the template
+- ssh into any orivate instance
+  ```bash
+  ssh -i asg-alb.cer ubuntu@10.0.2.x
+  #or
+  ssh -i asg-alb.cer ubuntu@10.0.3.x
   ```
 
 </details>
