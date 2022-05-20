@@ -46,16 +46,16 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 ## Objectives
 
-- [ ] You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private subnets`. The launch configuration will be used by an auto-scaling group.
+- [x]You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private Subnets`. The launch configuration will be used by an auto-scaling group.
 
-- [ ] You'll need `two vCPUs and at least 4GB of RAM.`
-- [ ] The Operating System to be used is `Ubuntu 18`. So, choose an `Instance size and Machine Image (AMI) that best fits this spec`. Be sure to allocate `at least 10GB` of disk space so that you don't run into issues.
-- [ ] Since you will be `downloading the application archive from an S3 Bucket`, you'll need to create an `IAM Role that allows your instances to use the S3 Service.`
-- [ ] Udagram communicates on the default `HTTP Port: 80,` so your servers will need this inbound port open since you will use it with the Load Balancer and the Load Balancer Health Check. As for outbound, the servers will need unrestricted internet access to be able to download and update their software.
-- [ ] The `load balancer `should `allow all public traffic (0.0.0.0/0) on port 80 inbound`, which is the default HTTP port. Outbound, it will only be` using port 80 to reach the internal servers.`
-- [ ] The application needs to be `deployed into private subnets` with a Load Balancer located in a public subnet.
-- [ ] One of the `output` exports of the CloudFormation script should be `the public URL of the LoadBalancer`. Bonus points if you `add http:// in front of the load balancer DNS Name `in the output, for convenience.
-- [ ] Set up a `bastion host (jump box)` to allow you to `SSH into your private subnet servers.` This bastion host would be on a `Public Subnet with port 22 `open only to your home IP address, and it would need to have the `private key` that you use to `access the other servers.`
+- [x] You'll need `two vCPUs and at least 4GB of RAM.`
+- [x] The Operating System to be used is `Ubuntu 18`. So, choose an `Instance size and Machine Image (AMI) that best fits this spec`. Be sure to allocate `at least 10GB` of disk space so that you don't run into issues.
+- [x] Since you will be `downloading the application archive from an S3 Bucket`, you'll need to create an `IAM Role that allows your instances to use the S3 Service.`
+- [x] Udagram communicates on the default `HTTP Port: 80,` so your servers will need this inbound port open since you will use it with the Load Balancer and the Load Balancer Health Check. As for outbound, the servers will need unrestricted internet access to be able to download and update their software.
+- [x] The `load balancer `should `allow all public traffic (0.0.0.0/0) on port 80 inbound`, which is the default HTTP port. Outbound, it will only be` using port 80 to reach the internal servers.`
+- [x] The application needs to be `deployed into private Subnets` with a Load Balancer located in a public Subnet.
+- [x] One of the `output` exports of the CloudFormation script should be `the public URL of the LoadBalancer`. Bonus points if you `add http:// in front of the load balancer DNS Name `in the output, for convenience.
+- [x] Set up a `bastion host (jump box)` to allow you to `SSH into your private Subnet servers.` This bastion host would be on a `Public Subnet with port 22 `open only to your home IP address, and it would need to have the `private key` that you use to `access the other servers.`
 
 <br>
 <br>
@@ -70,13 +70,23 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 - the region used here is `us-east-1`
 - Create a Key Pair named `asg-alb`
 - Obtain latest Ami id of Ubuntu 18
-  - Add values to [parameters.json ](./cloudformation/parameters.json)
-  - `asgImageId"` and `asgKeyPair`
+- Obtain your IP Address
+  - Add values `Key Pair name`, `Ip Address` and `ami Id` to [parameters.json ](./cloudformation/parameters.json)
+  - Parameter Keys: `asgKeyPair`, `sshIp` and `asgImageId`
 - deploy [cloudformation template](./cloudformation/main.yaml) which creates the following resources
-  - a vpc
-  - 2 public subnets, 1 public route etc...
-  - 2 private subnets
-  - etc
+  - a `VPC`
+  - an `Internet Gateway (IGW)`
+  - an `Internet Gateway attachment` to link the `VPC` to the `IGW`
+  - `2 Public Subnets`, `1 Public Route Table`, `1 Public Route`, `2 Public Route Table association`s for `each Subnet`
+  - `2 Nat Gateways` each with their own `Elactic IP addresses`
+  - `2 Private Subnets`, `2 Private Route Tables`, `Routes` and `Route Table Associations`
+  - `1 Security Group` for the `Load Balancer (ALB)`, allowing `HTTP Ingress` and `Egress`
+  - `1 Security Group` for the `Auto Scaling Group (ASG)` allowing `HTTP Ingress` and `SSH Ingress`
+  - `1 Security Group` for the `Bastion Host` allowing `SSH Ingress` from `your IP`
+  - `2 IAM Roles` with `s3ReadAccess` and `ec2ReadOnlyAccess` for the `ASG Launch Config` and the `Bastion Host`
+  - 1 `Bastion Host`
+  - 1 `ASG Launch Config` , 1 `ASG`, 1 `ASG Scaling Policy` for `CPU Utilisation`
+  - 1 `ALB Target Group`, ` 1 ALB`, `1 ALb Listener`, `1 ALB Listener Rule`
 
 <br>
 <br>
@@ -86,6 +96,17 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 <details>
 <summary>> Expand For Details </summary>
+
+- clone this repo and navigate to it. 
+- run the script to deploy the template
+  ```
+  ./scripts/run.sh create-stack
+  ```
+- Obtain ALB Domain String from stdout 
+  ```bash
+  # example
+  -------- alb-dns: http://asg-a-publi-8Q9RIHMEQFPX-999194011.us-east-1.elb.amazonaws.com
+  ```
 
 </details>
 
@@ -156,3 +177,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # To DO <a id='todo'></a> ([go to top](#top))
 
 - add stress test to test sacling policies
+- add Network ACLs
+- make keypair name a viariable
+- fix ALB Request Scaling Policy
+- Add CFN helper cripts to send success signals to ASG Creation policy

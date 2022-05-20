@@ -24,20 +24,8 @@
     "ParameterValue": "10.0.3.0/24"
   },
   {
-    "ParameterKey": "sshIp",
-    "ParameterValue": "47.16.207.88/32"
-  },
-  {
     "ParameterKey": "asgInstanceType",
     "ParameterValue": "t3.medium"
-  },
-  {
-    "ParameterKey": "asgImageId",
-    "ParameterValue": "ami-077f4dcd20ed5ed5d"
-  },
-  {
-    "ParameterKey": "asgKeyPair",
-    "ParameterValue": "asg-alb"
   },
   {
     "ParameterKey": "asgVolumeSize",
@@ -54,5 +42,17 @@
   {
     "ParameterKey": "maxRequestPerInstance",
     "ParameterValue": "3"
+  },
+  {
+    "ParameterKey": "asgKeyPair",
+    "ParameterValue": "asg-alb"
+  },
+  {
+    "ParameterKey": "sshIp",
+    "ParameterValue": "enter-your-ip-here/32"
+  },
+  {
+    "ParameterKey": "asgImageId",
+    "ParameterValue": "ami-077f4dcd20ed5ed5d"
   }
 ]
