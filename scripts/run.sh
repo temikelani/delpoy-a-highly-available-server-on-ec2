@@ -24,6 +24,9 @@ case $COMMAND in
     chmod u+x ./scripts/outputs.sh
     chmod u+x ./scripts/bastion-ssh.sh
     chmod 400 ./keypair/asg-alb.cer
+    sleep 400
+    source ./scripts/outputs.sh
+    source ./scripts/bastion-ssh.sh
     ;;
 
   update-stack)
@@ -36,9 +39,9 @@ case $COMMAND in
     chmod u+x ./scripts/outputs.sh
     chmod u+x ./scripts/bastion-ssh.sh
     chmod 400 ./keypair/asg-alb.cer
-    sleep 8m
-    ./scripts/outputs.sh
-    ./scripts/bastion-ssh.sh
+    sleep 400
+    source ./scripts/outputs.sh
+    source ./scripts/bastion-ssh.sh
     ;;
 
   delete-stack)
@@ -50,13 +53,12 @@ case $COMMAND in
     echo -n "Wrong arguments : Run script as follows:" 
     echo -n "Wrong arguments : ./run.sh arg1:" 
     echo -n "Where arg1: create-stack | update-stack | delete delete-stack"
-    echo -n "Where arg2: path-to-cloudformation-template"
     ;;
 esac
 
-if [[ "$COMMAND" == "create-stack" ] ||  [ "$COMMAND" == "update-stack" ]]
-then
-    sleep 8m
-    ./scripts/outputs.sh
-    ./scripts/bastion-ssh.sh
-fi
+# if [ "$COMMAND" == "create-stack" ] ||  [ "$COMMAND" == "update-stack" ]
+# then
+#     sleep 400
+#     source ./scripts/outputs.sh
+#     source ./scripts/bastion-ssh.sh
+# fi

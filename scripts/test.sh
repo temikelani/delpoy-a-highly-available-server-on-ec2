@@ -5,14 +5,7 @@ COMMAND=$1
 
 # Name of stack: vpc-subnets | asg-alb
 
-if [ $COMMAND == create-stack ]
+if [ "$COMMAND" == "create-stack" ] ||  [ "$COMMAND" == "update-stack" ]
 then
-  echo '--------Hey hey hey'
+    echo -n "----hey"
 fi
-
-# if [$COMMAND == "update-stack"]
-# then
-#     sleep 8m
-#     ./scripts/outputs.sh
-#     ./scripts/bastion-ssh.sh
-# fi

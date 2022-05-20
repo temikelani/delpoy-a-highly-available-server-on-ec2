@@ -63,6 +63,11 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 # Steps <a id='steps'></a> ([go to top](#top))
 
+- run
+  ```
+  aws configure
+  ```
+- the region used here is `us-east-1`
 - Create a Key Pair named `asg-alb`
 - Obtain latest Ami id of Ubuntu 18
   - Add values to [parameters.json ](./cloudformation/parameters.json)
@@ -151,4 +156,3 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # To DO <a id='todo'></a> ([go to top](#top))
 
 - add stress test to test sacling policies
-

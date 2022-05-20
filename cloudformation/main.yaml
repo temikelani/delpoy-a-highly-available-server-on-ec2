@@ -373,7 +373,8 @@ Resources:
       SubnetId: !Ref publicSubnet1
       UserData: !Base64 |
         #!/bin/bash -ex
-        yum update -y
+        apt-get update -y
+        apt-get upgrade -y
       Tags:
         - Key: Name
           Value: BastionHost
@@ -400,13 +401,14 @@ Resources:
         Fn::Sub: |
           #!/bin/bash -ex
           apt-get update -y
+          apt-get upgrade -y
           apt-get install unzip awscli -y
           apt-get install apache2 -y
           systemctl start apache2.service
           cd /var/www/html
-          # aws s3 cp s3://s3-bucket-name/web-files.zip .
-          # unzip -o udacity.zip
-          echo "<h1>Udacity Demo Web Server Up and Running\!</h1>" > index.html
+          aws s3 cp s3://udacity-demo-1/udacity.zip .
+          unzip -o udacity.zip
+          echo "<h1>Udacity Demo Web Server Up and Running\!</h1>" >> index.html
           EC2_AVAIL_ZONE=$(curl -s http://169.254.169.254/latest/meta-data/placement/availability-zone)
           echo "<h1>Hello World From $(hostname -f) in AZ $EC2_AVAIL_ZONE </h1>" >> index.html
 

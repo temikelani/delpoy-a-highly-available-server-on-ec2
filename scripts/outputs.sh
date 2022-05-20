@@ -8,4 +8,4 @@ export BASTION_SSH_ADDRESS=$(aws cloudformation describe-stacks --stack-name $ST
 
 export ALB_DNS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query "Stacks[*].Outputs[3].OutputValue" --output text)
 
-echo "alb-dns: $ALB_DNS"
+echo " -------- alb-dns: $ALB_DNS"
