@@ -18,6 +18,13 @@
 
 ## Architecture Diagram
 
+<details>
+<summary> Expand for Details</summary>
+
+![](./images/architecture.png)
+
+</details>
+
 <br>
 <br>
 <br>
