@@ -116,34 +116,32 @@ This needs to be automated so that the infrastructure can be discarded as soon a
   ./scripts/run.sh create-stack
   ```
 
-- After 8 minutes Script will automatically print ALB Domain to stdout
+- After 8 minutes, the script will automatically print ALB Domain to stdout
 
   ```bash
   # example
   -------- alb-dns: http://asg-a-publi-8Q9RIHMEQFPX-999194011.us-east-1.elb.amazonaws.com
   ```
 
-- Then Script will automatically copy revelant files and ssh into bastion Host. Enter yes to the prompt
+- Then script will also automatically copy revelant files and ssh into bastion Host. Enter yes to the prompt
 
   ```
   Are you sure you want to continue connecting (yes/no/[fingerprint])? yes
   ```
 
-- Once in bastion host run
+- Once in bastion host run the block below to output the `Private IPs` of all running instances to file `instance-details.txt`
 
   ```
   bash ./instance-details.sh
   ```
 
-  - to output all Running instance IP Addresses to file `instance-details.txt`
+- Obtain `Private IP` addressed of ASG server
 
-- Obtain private Ip addressed of ASG server
+  - private instances are in IP range `10.0.2.x` and `10.0.3.x` as defined in the template
 
   ```
   cat instance-details.txt
   ```
-
-  - private instances are in ip range `10.0.2.x` and `10.0.3.x` as defined in the template
 
 - ssh into any private instance
 
@@ -194,26 +192,30 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 # Resources <a id='res'></a> ([go to top](#top))
 
-- simulate stress on ASG
+<details>
+  <summary> Expand For Details  </summary>
+    - simulate stress on ASG
+    
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html#finding-an-ami-console
+    
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html#cfn-ec2-internetgateway-tags
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-path
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html
+    - https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
+      ¡
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html
+    
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-launchconfiguration.html
+    
+    - https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html
+    
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-creationpolicy.html
+    
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-autoscaling.html
+    
+    - https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html
 
-- https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/finding-an-ami.html#finding-an-ami-console
-
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-ec2-internetgateway.html#cfn-ec2-internetgateway-tags
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-role.html#cfn-iam-role-path
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-iam-instanceprofile.html
-- https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_use_switch-role-ec2_instance-profiles.html
-  ¡
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/pseudo-parameter-reference.html
-
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-resource-autoscaling-launchconfiguration.html
-
-- https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/device_naming.html
-
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-creationpolicy.html
-
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/quickref-autoscaling.html
-
-- https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/aws-attribute-updatepolicy.html
+</details>
 
 <br>
 <br>
