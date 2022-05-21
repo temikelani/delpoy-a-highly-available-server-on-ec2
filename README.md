@@ -3,11 +3,6 @@
 <br>
 <br>
 
-## Summary
-
-<br>
-<br>
-
 ## Tech Stack
 
 - AWS VPC
@@ -17,6 +12,8 @@
 - AWS CLoud Formation
 - AWS IAM
 - Bash
+
+<br>
 
 ## Architecture Diagram
 
@@ -51,21 +48,11 @@
 
 ## Scenario
 
-<details>
-  <summary> Expand For Details </summary>
-  <br>
-
 Your company is creating an Instagram clone called Udagram. Developers want to deploy a new application to the AWS infrastructure. You have been tasked with provisioning the required infrastructure and deploying a dummy application, along with the necessary supporting software.
 
 This needs to be automated so that the infrastructure can be discarded as soon as the testing team finishes their tests and gathers their results.
 
-</details>
-
 ## Objectives
-
-<details>
-  <summary> Expand For Details </summary>
-  <br>
 
 - [x] You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private Subnets`. The launch configuration will be used by an auto-scaling group.
 - [x] You'll need `two vCPUs and at least 4GB of RAM.`
@@ -76,7 +63,6 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 - [x] The application needs to be `deployed into private Subnets` with a Load Balancer located in a public Subnet.
 - [x] One of the `output` exports of the CloudFormation script should be `the public URL of the LoadBalancer`. Bonus points if you `add http:// in front of the load balancer DNS Name `in the output, for convenience.
 - [x] Set up a `bastion host (jump box)` to allow you to `SSH into your private Subnet servers.` This bastion host would be on a `Public Subnet with port 22 `open only to your home IP address, and it would need to have the `private key` that you use to `access the other servers.`
-</details>
 
 <br>
 <br>
