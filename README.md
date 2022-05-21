@@ -78,9 +78,9 @@ This needs to be automated so that the infrastructure can be discarded as soon a
     aws configure
     ```
   - the region used here is `us-east-1`
-  - Create a Key Pair named `asg-alb`
-  - Obtain latest Ami id of Ubuntu 18
-  - Obtain your IP Address
+  - `Create a Key Pair` named `asg-alb`
+  - `Obtain latest Ami id` of `Ubuntu 18`
+  - `Obtain your IP Address`
     - Add values `Key Pair name`, `Ip Address` and `ami Id` to [parameters.json ](./cloudformation/parameters.json)
     - Parameter Keys: `asgKeyPair`, `sshIp` and `asgImageId`
   - deploy [cloudformation template](./cloudformation/main.yaml) which creates the following resources
