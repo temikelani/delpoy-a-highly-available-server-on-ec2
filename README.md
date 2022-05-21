@@ -78,7 +78,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
     aws configure
     ```
   - the region used here is `us-east-1`
-  - `Create a Key Pair` named `asg-alb`
+  - `Create a Key Pair` named `asg-alb` and save the private key in the [keypair dir](./keypair)
   - `Obtain latest Ami id` of `Ubuntu 18`
   - `Obtain your IP Address`
     - Add values `Key Pair name`, `Ip Address` and `ami Id` to [parameters.json ](./cloudformation/parameters.json)
@@ -116,7 +116,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
   ./scripts/run.sh create-stack
   ```
 
-- After 8 minutes, the script will automatically print ALB Domain to stdout
+- After 7 minutes, the script will automatically print ALB Domain to stdout
 
   ```bash
   # example

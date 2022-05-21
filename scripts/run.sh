@@ -24,7 +24,7 @@ case $COMMAND in
     chmod u+x ./scripts/outputs.sh
     chmod u+x ./scripts/bastion-ssh.sh
     chmod 400 ./keypair/asg-alb.cer
-    sleep 480
+    sleep 420
     source ./scripts/outputs.sh
     source ./scripts/bastion-ssh.sh
     ;;
@@ -39,7 +39,7 @@ case $COMMAND in
     chmod u+x ./scripts/outputs.sh
     chmod u+x ./scripts/bastion-ssh.sh
     chmod 400 ./keypair/asg-alb.cer
-    sleep 480
+    sleep 420
     source ./scripts/outputs.sh
     source ./scripts/bastion-ssh.sh
     ;;
