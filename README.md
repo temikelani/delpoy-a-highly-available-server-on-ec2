@@ -51,14 +51,19 @@
 
 ## Scenario
 
-Your company is creating an Instagram clone called Udagram. Developers want to deploy a new application to the AWS infrastructure. You have been tasked with provisioning the required infrastructure and deploying a dummy application, along with the necessary supporting software.
-
-This needs to be automated so that the infrastructure can be discarded as soon as the testing team finishes their tests and gathers their results.
+<details>
+  <summary> Expand For Details </summary>
+  Your company is creating an Instagram clone called Udagram. Developers want to deploy a new application to the AWS infrastructure. You have been tasked with provisioning the required infrastructure and deploying a dummy application, along with the necessary supporting software.
+  
+  This needs to be automated so that the infrastructure can be discarded as soon as the testing team finishes their tests and gathers their results.
+</details>
 
 ## Objectives
 
-- [x] You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private Subnets`. The launch configuration will be used by an auto-scaling group.
+<details>
+  <summary> Expand For Details </summary>
 
+- [x] You'll need to create a `Launch Configuration` for your application servers in order to deploy `four servers,` `two located in each of your private Subnets`. The launch configuration will be used by an auto-scaling group.
 - [x] You'll need `two vCPUs and at least 4GB of RAM.`
 - [x] The Operating System to be used is `Ubuntu 18`. So, choose an `Instance size and Machine Image (AMI) that best fits this spec`. Be sure to allocate `at least 10GB` of disk space so that you don't run into issues.
 - [x] Since you will be `downloading the application archive from an S3 Bucket`, you'll need to create an `IAM Role that allows your instances to use the S3 Service.`
@@ -67,6 +72,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 - [x] The application needs to be `deployed into private Subnets` with a Load Balancer located in a public Subnet.
 - [x] One of the `output` exports of the CloudFormation script should be `the public URL of the LoadBalancer`. Bonus points if you `add http:// in front of the load balancer DNS Name `in the output, for convenience.
 - [x] Set up a `bastion host (jump box)` to allow you to `SSH into your private Subnet servers.` This bastion host would be on a `Public Subnet with port 22 `open only to your home IP address, and it would need to have the `private key` that you use to `access the other servers.`
+</details>
 
 <br>
 <br>
@@ -74,30 +80,34 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 
 # Steps <a id='steps'></a> ([go to top](#top))
 
-- run
-  ```
-  aws configure
-  ```
-- the region used here is `us-east-1`
-- Create a Key Pair named `asg-alb`
-- Obtain latest Ami id of Ubuntu 18
-- Obtain your IP Address
-  - Add values `Key Pair name`, `Ip Address` and `ami Id` to [parameters.json ](./cloudformation/parameters.json)
-  - Parameter Keys: `asgKeyPair`, `sshIp` and `asgImageId`
-- deploy [cloudformation template](./cloudformation/main.yaml) which creates the following resources
-  - a `VPC`
-  - an `Internet Gateway (IGW)`
-  - an `Internet Gateway attachment` to link the `VPC` to the `IGW`
-  - `2 Public Subnets`, `1 Public Route Table`, `1 Public Route`, `2 Public Route Table association`s for `each Subnet`
-  - `2 Nat Gateways` each with their own `Elactic IP addresses`
-  - `2 Private Subnets`, `2 Private Route Tables`, `Routes` and `Route Table Associations`
-  - `1 Security Group` for the `Load Balancer (ALB)`, allowing `HTTP Ingress` and `Egress`
-  - `1 Security Group` for the `Auto Scaling Group (ASG)` allowing `HTTP Ingress` and `SSH Ingress`
-  - `1 Security Group` for the `Bastion Host` allowing `SSH Ingress` from `your IP`
-  - `2 IAM Roles` with `s3ReadAccess` and `ec2ReadOnlyAccess` for the `ASG Launch Config` and the `Bastion Host`
-  - `1 Bastion Host`
-  - `1 ASG Launch Config` , `1 ASG`, `1 ASG Scaling Policy` for `CPU Utilisation`
-  - `1 ALB Target Group`, `1 ALB`, `1 ALb Listener`, `1 ALB Listener Rule`
+<details>
+  <summary> Exapand For Details </summary>
+  
+  - run
+    ```
+    aws configure
+    ```
+  - the region used here is `us-east-1`
+  - Create a Key Pair named `asg-alb`
+  - Obtain latest Ami id of Ubuntu 18
+  - Obtain your IP Address
+    - Add values `Key Pair name`, `Ip Address` and `ami Id` to [parameters.json ](./cloudformation/parameters.json)
+    - Parameter Keys: `asgKeyPair`, `sshIp` and `asgImageId`
+  - deploy [cloudformation template](./cloudformation/main.yaml) which creates the following resources
+    - a `VPC`
+    - an `Internet Gateway (IGW)`
+    - an `Internet Gateway attachment` to link the `VPC` to the `IGW`
+    - `2 Public Subnets`, `1 Public Route Table`, `1 Public Route`, `2 Public Route Table association`s for `each Subnet`
+    - `2 Nat Gateways` each with their own `Elactic IP addresses`
+    - `2 Private Subnets`, `2 Private Route Tables`, `Routes` and `Route Table Associations`
+    - `1 Security Group` for the `Load Balancer (ALB)`, allowing `HTTP Ingress` and `Egress`
+    - `1 Security Group` for the `Auto Scaling Group (ASG)` allowing `HTTP Ingress` and `SSH Ingress`
+    - `1 Security Group` for the `Bastion Host` allowing `SSH Ingress` from `your IP`
+    - `2 IAM Roles` with `s3ReadAccess` and `ec2ReadOnlyAccess` for the `ASG Launch Config` and the `Bastion Host`
+    - `1 Bastion Host`
+    - `1 ASG Launch Config` , `1 ASG`, `1 ASG Scaling Policy` for `CPU Utilisation`
+    - `1 ALB Target Group`, `1 ALB`, `1 ALb Listener`, `1 ALB Listener Rule`
+</details>
 
 <br>
 <br>
