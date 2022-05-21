@@ -11,10 +11,12 @@
 ## Tech Stack
 
 - AWS VPC
-- AWS EC2
+- AWS EC2, ASG, ALB
 - AWS CLI
 - AWS S3
 - AWS CLoud Formation
+- AWS IAM
+- Bash
 
 ## Architecture Diagram
 
@@ -39,6 +41,7 @@
 - [Via CLI/Bash Script](#2)
 - [Via Console](#3)
 - [Resources](#res)
+- [To-Do](#to-do)
 - [go to top](#top)
 
 <br>
@@ -100,7 +103,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 <br>
 <br>
 
-# Via CLoud Formation <a id='0'></a> ([go to top](#top))
+# Via Cloud Formation <a id='0'></a> ([go to top](#top))
 
 <details>
 <summary> Expand For Details </summary>
@@ -216,7 +219,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 <br>
 <br>
 
-# To DO <a id='todo'></a> ([go to top](#top))
+# To-Do <a id='to-do'></a> ([go to top](#top))
 
 - add stress test to test scaling policies
 - add Network ACLs
