@@ -20,6 +20,7 @@
 
 <details>
 <summary> Expand for Details</summary>
+<br>
 
 ![](./images/architecture.png)
 
@@ -158,7 +159,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # Via Terraform <a id='1'></a> ([go to top](#top))
 
 <details>
-<summary> CLick to Expand</summary>
+<summary> Coming Soon </summary>
 
 </details>
 
@@ -169,7 +170,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # Via CLI/Bash Script<a id='2'></a> ([go to top](#top))
 
 <details>
-<summary> CLick to Expand</summary>
+<summary> Coming Soon </summary>
 
 </details>
 
@@ -180,7 +181,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 # Via Console <a id='3'></a> ([go to top](#top))
 
 <details>
-<summary> CLick to Expand</summary>
+<summary> Coming Soon </summary>
 
 </details>
 
