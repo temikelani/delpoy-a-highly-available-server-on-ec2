@@ -54,10 +54,11 @@
 <details>
   <summary> Expand For Details </summary>
   <br>
-  
-  Your company is creating an Instagram clone called Udagram. Developers want to deploy a new application to the AWS infrastructure. You have been tasked with provisioning the required infrastructure and deploying a dummy application, along with the necessary supporting software.
-  
-  This needs to be automated so that the infrastructure can be discarded as soon as the testing team finishes their tests and gathers their results.
+
+Your company is creating an Instagram clone called Udagram. Developers want to deploy a new application to the AWS infrastructure. You have been tasked with provisioning the required infrastructure and deploying a dummy application, along with the necessary supporting software.
+
+This needs to be automated so that the infrastructure can be discarded as soon as the testing team finishes their tests and gathers their results.
+
 </details>
 
 ## Objectives
@@ -83,7 +84,8 @@
 # Steps <a id='steps'></a> ([go to top](#top))
 
 <details>
-  <summary> Exapand For Details </summary>
+  <summary> Expand For Details </summary>
+  <br>
   
   - run
     ```
@@ -235,9 +237,14 @@
 
 # To-Do <a id='to-do'></a> ([go to top](#top))
 
-- add stress test to test scaling policies
-- add Network ACLs
-- make keypair name a viariable
-- fix ALB Request Scaling Policy
-- Add CFN helper cripts to send success signals to ASG Creation policy
-- upgrade python on ubuntu 18 (or just use ubuntu 20?)
+<details>
+  <summary> Expand For Details </summary>
+  <br>
+  
+  - add stress test to test scaling policies
+  - add Network ACLs
+  - make keypair name a viariable
+  - fix ALB Request Scaling Policy
+  - Add CFN helper cripts to send success signals to ASG Creation policy
+  - upgrade python on ubuntu 18 (or just use ubuntu 20?)
+</details>
