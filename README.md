@@ -3,6 +3,12 @@
 <br>
 <br>
 
+## Summary
+
+Deploying a web app in an austosclaing group across two private subnets. Routing traffic to the serves throught an ALB. Pulling web-app files from s3 into EC2 with userdata scripts. Setting up Bastion Host to access private subnet servers.
+
+<br>
+
 ## Tech Stack
 
 - AWS VPC
