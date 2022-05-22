@@ -1,4 +1,4 @@
-# Deploy An Application to the Apache Web Server running on an EC2 instance. <a id ='top'></a>
+# Deploying a Highly Available Web App On EC2. <a id ='top'></a>
 
 <br>
 <br>
@@ -232,7 +232,7 @@ This needs to be automated so that the infrastructure can be discarded as soon a
 <details>
   <summary> Expand For Details </summary>
   <br>
-  
+  - same project but make it serverless!
   - add stress test to test scaling policies
   - add Network ACLs
   - make keypair name a viariable
